@@ -1,1 +1,3 @@
-console.log("Hello via Bun!");
+import requestMaker from "./APIController";
+
+console.log(requestMaker());

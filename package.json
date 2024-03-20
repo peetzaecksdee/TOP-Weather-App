@@ -14,7 +14,6 @@
     "prettier": "^3.2.5",
     "style-loader": "^3.3.4",
     "webpack": "^5.90.3",
-    "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.2"
   },
   "peerDependencies": {
@@ -26,7 +25,9 @@
     "pushtree": "git subtree push --prefix dist origin gh-pages"
   },
   "dependencies": {
+    "ajv": "^8.12.0",
     "test": "git@github.com:peetzaecksdee/TOP-Weather-App.git",
+    "webpack-cli": "^5.1.4",
     "webpack-merge": "^5.10.0"
   }
 }
