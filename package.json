@@ -26,6 +26,7 @@
     "pushtree": "git subtree push --prefix dist origin gh-pages"
   },
   "dependencies": {
+    "test": "git@github.com:peetzaecksdee/TOP-Weather-App.git",
     "webpack-merge": "^5.10.0"
   }
 }
