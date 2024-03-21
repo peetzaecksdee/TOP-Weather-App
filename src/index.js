@@ -1,3 +1,7 @@
-import requestMaker from "./APIController";
+import { requestCoordinate, requestCurrentWeather } from './APIController';
 
-console.log(requestMaker());
+requestCoordinate("England").then((res1) => {
+  requestCurrentWeather(res1.lat, res1.lon, 'imperial').then(res => {
+    console.log(res);
+  });
+})

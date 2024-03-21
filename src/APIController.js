@@ -1,34 +1,79 @@
-async function requestMaker(query = 'USA') {
-	let weatherData;
+import { formatDate, fromUnixTime } from 'date-fns';
 
+const key = '18cf709d930f9c70d31238613b8b992a';
+
+function formatCityName(name) {
+	return name
+		.replace(/(\s+$|^\s+)/g, '')
+		.replace(/(,\s+)/g, ',')
+		.replace(/(\s+,)/g, ',')
+		.replace(/\s+/g, '+');
+}
+
+async function fetchData(url) {
 	try {
-		const response = await fetch(
-			`https://api.weatherapi.com/v1/current.json?key=95fac557f53c4159ad8130137241703&q=${query}`
-		);
-		if (response.status !== 200 || !response.ok) throw new Error(`Fail to reach the API with status ${response.status}.`);
+		const response = await fetch(url);
+		if (response.status !== 200 || !response.ok)
+			throw new Error(
+				`Fail to reach the API with status ${response.status} \n${response.json().then((res) => res.message)}.`
+			);
 
-		weatherData = await response.json();
+		const json = await response.json();
+		return json;
 	} catch (err) {
 		throw new Error(err);
 	}
-
-  return {
-    name: weatherData.location.name,
-    region: weatherData.location.region,
-    country: weatherData.location.country,
-    localtime: weatherData.location.localtime,
-
-    is_day: weatherData.current.is_day,
-    tempC: weatherData.current.temp_c,
-    tempF: weatherData.current.temp_f,
-    lastUpdated: weatherData.current.last_updated,
-
-    condition: weatherData.current.condition.text,
-    windM: weatherData.current.wind_mph,
-    windK: weatherData.current.wind_kph,
-    windDegree: weatherData.current.wind_degree,
-    windDir: weatherData.current.wind_dir,
-  }
 }
 
-export default requestMaker;
+async function requestCoordinate(query = 'Thailand') {
+	const coordinateData = await fetchData(
+		`http://api.openweathermap.org/geo/1.0/direct?q=${formatCityName(query)}&appid=${key}`
+	);
+
+	return {
+		lat: coordinateData[0].lat,
+		lon: coordinateData[0].lon,
+	};
+}
+
+async function requestCurrentWeather(lat, lon, unit = 'metric') {
+	const weatherData = await fetchData(
+		`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=${unit}&appid=${key}`
+	);
+	
+	return {
+		name: weatherData.name,
+		country: weatherData.sys.country,
+		weather: {
+			description: weatherData.weather[0].description,
+			icon: weatherData.weather[0].icon,
+		},
+		temps: {
+			temp: weatherData.main.temp,
+			feelsLike: weatherData.main.feels_like,
+			min: weatherData.main.temp_min,
+			max: weatherData.main.temp_max,
+			humidity: weatherData.main.humidity,
+		},
+		time: {
+			date: formatDate(
+				fromUnixTime(weatherData.dt + weatherData.timezone),
+				'EEEE, d MMM y'
+			),
+			time: formatDate(
+				fromUnixTime(weatherData.dt + weatherData.timezone),
+				'pp'
+			),
+		},
+	};
+}
+
+async function requestForecast(lat, lon, unit = 'metric') {
+	const forecastData = await fetchData(
+		`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=${unit}&appid=${key}`
+	);
+	
+	return forecastData.list;
+}
+
+export { requestCurrentWeather, requestCoordinate, requestForecast };
