@@ -1,12 +1,13 @@
 import { requestCurrentWeather } from './APIController';
+import { convertUnits, getUnits } from './utils';
 
-async function getSearch(value) {
+async function getSearch(value, unit) {
 	const errorText = document.querySelector('.error');
 	let weather;
 
 	try {
 		errorText.textContent = '';
-		weather = await requestCurrentWeather(value);
+		weather = await requestCurrentWeather(value, unit);
 	} catch (err) {
 		errorText.textContent =
 			'The location can\'t be found! Try "City, Country" format!';
@@ -23,22 +24,35 @@ function mainInfo(weatherInfo) {
 	countryText.textContent = weatherInfo.name;
 	dateText.textContent = weatherInfo.time.date;
 	timeText.textContent = weatherInfo.time.time;
-	tempText.textContent = `${weatherInfo.temps.temp} °C`;
+	tempText.textContent = `${weatherInfo.temps.temp} °${document.querySelector('.temperature-abbreviation').dataset.temp}`;
+}
+
+function changeInfo(weatherInfo) {
+  mainInfo(weatherInfo)
 }
 
 function init() {
 	const searchBox = document.querySelector('#search');
 	const tempButton = document.querySelector('.temperature-abbreviation');
+	let weatherData;
 
 	getSearch('Thailand').then((res) => {
-		if (res) mainInfo(res);
+		if (res) {
+      weatherData = res;
+			changeInfo(weatherData);
+		}
 	});
 
 	searchBox.addEventListener('keypress', (e) => {
 		if (e.key === 'Enter') {
-			getSearch(searchBox.value).then((res) => {
-				if (res) mainInfo(res);
-			});
+			getSearch(searchBox.value, getUnits(tempButton.dataset.temp)).then(
+				(res) => {
+					if (res) {
+						weatherData = res;
+						changeInfo(weatherData);
+					}
+				}
+			);
 		}
 	});
 
@@ -50,6 +64,11 @@ function init() {
 			tempButton.dataset.temp = 'C';
 			tempButton.textContent = 'Display: °C';
 		}
+		weatherData.temps.temp = convertUnits(
+			tempButton.dataset.temp,
+			weatherData.temps.temp
+		);
+		changeInfo(weatherData);
 	});
 }
 
