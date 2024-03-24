@@ -27,8 +27,22 @@ function mainInfo(weatherInfo) {
 	tempText.textContent = `${weatherInfo.temps.temp} °${document.querySelector('.temperature-abbreviation').dataset.temp}`;
 }
 
+function displayInfo(weatherInfo) {
+	return weatherInfo;
+}
+
+function secondaryInfo(weatherInfo) {
+	return weatherInfo;
+}
+
+function mainDisplay(weatherInfo) {
+	mainInfo(weatherInfo);
+	displayInfo(weatherInfo);
+	secondaryInfo(weatherInfo);
+}
+
 function changeInfo(weatherInfo) {
-  mainInfo(weatherInfo)
+	mainDisplay(weatherInfo);
 }
 
 function init() {
@@ -38,7 +52,7 @@ function init() {
 
 	getSearch('Thailand').then((res) => {
 		if (res) {
-      weatherData = res;
+			weatherData = res;
 			changeInfo(weatherData);
 		}
 	});
