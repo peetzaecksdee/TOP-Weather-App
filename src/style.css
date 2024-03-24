@@ -17,6 +17,10 @@
 	box-sizing: border-box;
 }
 
+.white {
+  color: white;
+}
+
 body {
   width: 100vw;
 	height: 100vh;
@@ -27,9 +31,14 @@ main {
 	height: 100%;
 	background: url('./assets/images/Sky.jpg') no-repeat center center fixed;
 	background-size: cover;
+  padding: 1rem 2rem;
 
 	display: flex;
 	flex-direction: column;
+}
+
+.pad-bottom {
+  padding-bottom: 1rem;
 }
 
 .search-container {
@@ -66,6 +75,7 @@ main {
   top: 50%;
   transform: translateY(-50%);
   left: .5rem;
+  color: black;
 }
 
 .main-display {
@@ -74,21 +84,56 @@ main {
 	align-items: center;
 }
 
-.main-info {
+.main-info,
+.display {
   display: flex;
   justify-content: center;
-  align-items: start;
   flex-direction: column;
-  gap: .2rem;
-  font-size: 1.5rem;
+}
+
+.main-info {
   padding: 1rem;
-  color: white;
+  align-items: start;
+}
+
+.title {
+  font-size: 3.5rem;
+}
+
+.large {
+  font-size: 2rem;
+}
+
+.display {
+  align-items: center;
+}
+
+.underline {
+  text-decoration: underline;
 }
 
 .temperature-abbreviation {
   border: none;
   background: none;
-  color: white;
-  font-size: 1.2rem;
   cursor: pointer;
+}
+
+.weather-icon {
+  width: 4rem;
+  height: 4rem;
+}
+
+.secondary-info > * {
+  display: flex;
+  padding: 2rem 0;
+}
+
+.secondary-info .fa-solid {
+  padding-right: 1rem;
+  font-size: 3rem;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
 }

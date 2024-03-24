@@ -1,19 +1,15 @@
-/**
- * Get the name for the unit
- * @param {C | F} unit
- */
 function getUnits(unit) {
-	return unit === 'C' ? 'metric' : 'imperial';
+	return unit === 'metric' ? 'C' : 'F';
 }
 
 /**
  * 
- * @param {C | F} unit Target Unit
+ * @param {metric, imperial} unit Target Unit
  * @param {number} temp 
  * @returns 
  */
 function convertUnits(unit, temp) {
-	if (unit === 'C') {
+	if (unit === 'metric') {
 		return ((temp - 32) / 1.79999999).toFixed(2);
 	}
 	

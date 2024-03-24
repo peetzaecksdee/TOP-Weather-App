@@ -55,8 +55,6 @@ async function requestCurrentWeather(query = 'Thailand', unit = 'metric') {
 		temps: {
 			temp: weatherData.main.temp,
 			feelsLike: weatherData.main.feels_like,
-			min: weatherData.main.temp_min,
-			max: weatherData.main.temp_max,
 			humidity: weatherData.main.humidity,
 		},
 		time: {
@@ -72,12 +70,4 @@ async function requestCurrentWeather(query = 'Thailand', unit = 'metric') {
 	};
 }
 
-async function requestForecast(lat, lon, unit = 'metric') {
-	const forecastData = await fetchData(
-		`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=${unit}&appid=${key}`
-	);
-
-	return forecastData.list;
-}
-
-export { requestCurrentWeather, requestCoordinate, requestForecast };
+export { requestCurrentWeather, requestCoordinate };

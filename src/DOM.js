@@ -15,7 +15,7 @@ async function getSearch(value, unit) {
 	return weather;
 }
 
-function mainInfo(weatherInfo) {
+function renderMainInfo(weatherInfo) {
 	const countryText = document.querySelector('.country');
 	const dateText = document.querySelector('.date');
 	const timeText = document.querySelector('.time');
@@ -24,25 +24,27 @@ function mainInfo(weatherInfo) {
 	countryText.textContent = weatherInfo.name;
 	dateText.textContent = weatherInfo.time.date;
 	timeText.textContent = weatherInfo.time.time;
-	tempText.textContent = `${weatherInfo.temps.temp} °${document.querySelector('.temperature-abbreviation').dataset.temp}`;
+	tempText.textContent = `${weatherInfo.temps.temp} °${getUnits(document.querySelector('.temperature-abbreviation').dataset.temp)}`;
 }
 
-function displayInfo(weatherInfo) {
-	return weatherInfo;
+function renderDisplay(weatherInfo) {
+	const weatherImage = document.querySelector('.weather-icon');
+	const description = document.querySelector('.description');
+	weatherImage.src = `https://openweathermap.org/img/wn/${weatherInfo.weather.icon}.png`
+	description.textContent = weatherInfo.weather.description;
 }
 
-function secondaryInfo(weatherInfo) {
-	return weatherInfo;
+function renderSecondaryInfo(weatherInfo) {
+	const humidity = document.querySelector('.humidity');
+	const feelsLike = document.querySelector('.feels-like');
+	humidity.textContent = `${weatherInfo.temps.humidity} %`;
+	feelsLike.textContent = `${weatherInfo.temps.feelsLike} °${getUnits(document.querySelector('.temperature-abbreviation').dataset.temp)}`;
 }
 
-function mainDisplay(weatherInfo) {
-	mainInfo(weatherInfo);
-	displayInfo(weatherInfo);
-	secondaryInfo(weatherInfo);
-}
-
-function changeInfo(weatherInfo) {
-	mainDisplay(weatherInfo);
+function renderMainDisplay(weatherInfo) {
+	renderMainInfo(weatherInfo);
+	renderDisplay(weatherInfo);
+	renderSecondaryInfo(weatherInfo);
 }
 
 function init() {
@@ -53,17 +55,17 @@ function init() {
 	getSearch('Thailand').then((res) => {
 		if (res) {
 			weatherData = res;
-			changeInfo(weatherData);
+			renderMainDisplay(weatherData);
 		}
 	});
 
 	searchBox.addEventListener('keypress', (e) => {
 		if (e.key === 'Enter') {
-			getSearch(searchBox.value, getUnits(tempButton.dataset.temp)).then(
+			getSearch(searchBox.value, tempButton.dataset.temp).then(
 				(res) => {
 					if (res) {
 						weatherData = res;
-						changeInfo(weatherData);
+						renderMainDisplay(weatherData);
 					}
 				}
 			);
@@ -71,18 +73,18 @@ function init() {
 	});
 
 	tempButton.addEventListener('click', () => {
-		if (tempButton.dataset.temp === 'C') {
-			tempButton.dataset.temp = 'F';
+		if (tempButton.dataset.temp === 'metric') {
+			tempButton.dataset.temp = 'imperial';
 			tempButton.textContent = 'Display: °F';
 		} else {
-			tempButton.dataset.temp = 'C';
+			tempButton.dataset.temp = 'metric';
 			tempButton.textContent = 'Display: °C';
 		}
 		weatherData.temps.temp = convertUnits(
 			tempButton.dataset.temp,
 			weatherData.temps.temp
 		);
-		changeInfo(weatherData);
+		renderMainDisplay(weatherData);
 	});
 }
 
