@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
@@ -10,6 +10,22 @@
 		<title>Template</title>
 	</head>
 	<body>
-		<div id="content"></div>
+		<main>
+			<div class="search-container fa-solid">
+				<input type="text" id="search" />
+				<span class="error"></span>
+			</div>
+			<div class="main-display">
+				<div class="main-info">
+					<span class="country"></span>
+					<span class="date"></span>
+					<span class="time"></span>
+					<span class="temperature"></span>
+					<button class="temperature-abbreviation" data-temp="C">Display: °C</button>
+				</div>
+				<div class="display"></div>
+				<div class="secondary-info"></div>
+			</div>
+		</main>
 	</body>
 </html>

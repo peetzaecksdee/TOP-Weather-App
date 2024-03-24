@@ -15,7 +15,7 @@ async function fetchData(url) {
 		const response = await fetch(url);
 		if (response.status !== 200 || !response.ok)
 			throw new Error(
-				`Fail to reach the API with status ${response.status} \n${response.json().then((res) => res.message)}.`
+				`Fail to reach the API with status ${response.status}}.`
 			);
 
 		const json = await response.json();
@@ -26,21 +26,25 @@ async function fetchData(url) {
 }
 
 async function requestCoordinate(query = 'Thailand') {
-	const coordinateData = await fetchData(
-		`http://api.openweathermap.org/geo/1.0/direct?q=${formatCityName(query)}&appid=${key}`
-	);
+	try {
+		const coordinateData = await fetchData(
+			`https://api.openweathermap.org/data/2.5/weather?q=${formatCityName(query)}&appid=${key}`
+		);
 
-	return {
-		lat: coordinateData[0].lat,
-		lon: coordinateData[0].lon,
-	};
+		return {
+			lat: coordinateData.coord.lat,
+			lon: coordinateData.coord.lon,
+		};
+	} catch {
+		throw new Error('The place does not exists!');
+	}
 }
 
-async function requestCurrentWeather(lat, lon, unit = 'metric') {
+async function requestCurrentWeather(query = 'Thailand', unit = 'metric') {
 	const weatherData = await fetchData(
-		`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=${unit}&appid=${key}`
+		`https://api.openweathermap.org/data/2.5/weather?q=${formatCityName(query)}&units=${unit}&appid=${key}`
 	);
-	
+
 	return {
 		name: weatherData.name,
 		country: weatherData.sys.country,
@@ -57,12 +61,12 @@ async function requestCurrentWeather(lat, lon, unit = 'metric') {
 		},
 		time: {
 			date: formatDate(
-				fromUnixTime(weatherData.dt + weatherData.timezone),
+				fromUnixTime(weatherData.dt),
 				'EEEE, d MMM y'
 			),
 			time: formatDate(
-				fromUnixTime(weatherData.dt + weatherData.timezone),
-				'pp'
+				fromUnixTime(weatherData.dt),
+				'p'
 			),
 		},
 	};
@@ -72,7 +76,7 @@ async function requestForecast(lat, lon, unit = 'metric') {
 	const forecastData = await fetchData(
 		`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=${unit}&appid=${key}`
 	);
-	
+
 	return forecastData.list;
 }
 

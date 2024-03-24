@@ -1,0 +1,94 @@
+@font-face {
+  font-family: 'Nunito';
+  src: url('./assets/fonts/Nunito-Medium.ttf') format('truetype'),
+   url('./assets/fonts/Nunito-MediumItalic.ttf') format('truetype'),
+   url('./assets/fonts/Nunito-Bold.ttf') format('truetype'),
+   url('./assets/fonts/Nunito-BoldItalic.ttf') format('truetype'),
+   url('./assets/fonts/Nunito-Light.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+*,
+*::after,
+*::before {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+  width: 100vw;
+	height: 100vh;
+  font-family: Nunito;
+}
+
+main {
+	height: 100%;
+	background: url('./assets/images/Sky.jpg') no-repeat center center fixed;
+	background-size: cover;
+
+	display: flex;
+	flex-direction: column;
+}
+
+.search-container {
+	position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+	top: 1rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#search {
+  width: clamp(20rem, 35vw, 50rem);
+  border: none;
+  border-radius: 6rem;
+  padding: 1rem 2rem;
+  height: 2rem;
+}
+
+.error {
+  font-size: .6rem;
+  color: red;
+  font-style: italic;
+  position: absolute;
+  top: 2.3rem;
+  letter-spacing: .2rem;
+}
+
+.search-container::before {
+  content: '\f002';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: .5rem;
+}
+
+.main-display {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.main-info {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+  gap: .2rem;
+  font-size: 1.5rem;
+  padding: 1rem;
+  color: white;
+}
+
+.temperature-abbreviation {
+  border: none;
+  background: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
